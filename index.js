@@ -1,11 +1,3 @@
-var config = require('config');
+require('./hipchat/index');
 
-var HIPCHAT = require('./hipchat/lib/hipchat');
-var hipchat = new HIPCHAT(config.hipchatAPIKey);
-
-// this will list all of your rooms
-hipchat.request('room', function(err, rooms){
-
-  console.log(err);
-  console.log(rooms)
-});
+//and require the game stuff as well

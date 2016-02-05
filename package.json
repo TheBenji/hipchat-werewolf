@@ -1,0 +1,15 @@
+{
+  "name": "werewolf",
+  "version": "1.0.0",
+  "description": "The werewolf chat-game engine",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Benjamin August",
+  "license": "MIT",
+  "dependencies": {
+    "config": "^1.19.0",
+    "request": "^2.69.0"
+  }
+}

@@ -1,14 +1,51 @@
 var config = require('config');
 
-var HIPCHAT = require('./hipchat/lib/hipchat');
+var HIPCHAT = require('./lib/hipchat');
 var hipchat = new HIPCHAT(config.hipchatAPIKey);
 
-var mainLoop = function() {
-  // this will list all of your rooms
-  hipchat.request('room/1323446/history', function(err, history){
 
-    console.log(history);
-  });
-}
+module.exports = function(game) {
 
-setInterval(mainLoop, 1000);
+  
+  var cmdMapper = [{
+    "cmd": "/start",
+    "method": function() {
+      return game.startGame();
+    }
+  }];
+
+  var lastCheckTimestamp = Date.now();
+
+  var mainLoop = function() {
+    // this will list all of your rooms
+    hipchat.request('room/1323446/history/latest', function(err, history){
+      if(history && history.items) {
+
+        history.items.forEach(function(message) {
+
+          if(new Date(message.date).getTime() > lastCheckTimestamp) {
+            lastCheckTimestamp = new Date(message.date).getTime();
+            console.log('New message: ' + message.message);
+            cmdMapper.forEach(function(cmd) {
+              if(message.message.search(cmd.cmd) !== -1) {
+                console.log('Found cmd: ' + cmd.cmd);
+                var e = cmd.method();
+                
+                console.log("Foo: " + e);
+                if(e !== true) {
+                  console.log('Error: ' + e);
+                }
+              }
+            });
+          }
+        });
+
+      } else {
+        
+        console.log(history)
+      }
+    });
+  }
+
+  setInterval(mainLoop, 5000);
+};

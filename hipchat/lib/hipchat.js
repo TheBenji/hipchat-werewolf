@@ -14,7 +14,7 @@ Hipchat.prototype.request = function(endpoint, callback) {
       return callback(null, JSON.parse(body));
     }
     
-    return callback(err, null);
+    return callback(err, JSON.parse(body));
   });
 }
 

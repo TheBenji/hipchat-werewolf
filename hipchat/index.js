@@ -7,7 +7,7 @@ var hipchat = new HIPCHAT(config.hipchatAPIKey);
 
 module.exports = function(game) {
 
-  game.eventEmitter.on("error", function (message) {
+  game.eventEmitter.on("roomNotification", function (message) {
       hipchat.postRequest('room/'+config.roomId+'/message', {"message":message},function(err,response){
           console.log("err:"+err);
           console.log("response:"+response);
@@ -30,7 +30,7 @@ module.exports = function(game) {
     {
       "cmd":"/join",
       "method":function(message){
-        return game.joinPlayer(message.from.name, message.from.id);
+        return game.joinPlayer("@"+message.from.mention_name, message.from.id);
       }
     }
   ];

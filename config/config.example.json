@@ -3,7 +3,17 @@
   "adminId":-1,
   "roomId":-1,
   "durations":{
-  	"one":60000
+  	"one":20000
   },
-  "minPlayers":7
+  "minPlayers":2,
+  "roles":[
+  	"",
+  	"villiger",
+  	"wolf",
+  	"seer",
+  	"doctor"
+  ],
+  "rolesCount":{
+  	"wolf":2
+  }
 }

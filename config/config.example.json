@@ -1,3 +1,9 @@
 {
-  "hipchatAPIKey": "YOUR API KEY"
+  "hipchatAPIKey": "YOUR API KEY",
+  "adminId":-1,
+  "roomId":-1,
+  "durations":{
+  	"one":60000
+  },
+  "minPlayers":7
 }

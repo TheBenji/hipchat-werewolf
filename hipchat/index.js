@@ -12,7 +12,14 @@ module.exports = function(game) {
     "method": function() {
       return game.startGame();
     }
-  }];
+  },
+    {
+      "cmd":"/join",
+      "method":function(message){
+        return game.joinPlayer(message.from.name, message.from.id);
+      }
+    }
+  ];
 
   var lastCheckTimestamp = Date.now();
 
@@ -29,7 +36,7 @@ module.exports = function(game) {
             cmdMapper.forEach(function(cmd) {
               if(message.message.search(cmd.cmd) !== -1) {
                 console.log('Found cmd: ' + cmd.cmd);
-                var e = cmd.method();
+                var e = cmd.method(message);
                 
                 console.log("Foo: " + e);
                 if(e !== true) {

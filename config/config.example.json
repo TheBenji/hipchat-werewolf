@@ -1,19 +1,20 @@
 {
   "hipchatAPIKey": "YOUR API KEY",
-  "adminId":-1,
-  "roomId":-1,
-  "durations":{
-  	"one":20000
+  "adminId": -1,
+  "roomId": -1,
+  "durations": {
+    "one": 20000,
+    "two": 20000
   },
-  "minPlayers":2,
-  "roles":[
-  	"",
-  	"villiger",
-  	"wolf",
-  	"seer",
-  	"doctor"
+  "minPlayers": 2,
+  "roles": [
+    "",
+    "villiger",
+    "wolf",
+    "seer",
+    "doctor"
   ],
-  "rolesCount":{
-  	"wolf":2
+  "rolesCount": {
+    "wolf": 2
   }
 }

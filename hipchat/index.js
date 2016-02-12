@@ -3,7 +3,7 @@ var config = require('config');
 
 var HIPCHAT = require('./lib/hipchat');
 var hipchat = new HIPCHAT(config.hipchatAPIKey);
-
+var privateMessageIds = [];
 
 module.exports = function (game) {
 
@@ -19,33 +19,8 @@ module.exports = function (game) {
         });
     });
 
-    game.eventEmitter.on("deleteRoom", function (id) {
-        hipchat.deleteRequest('/room/' + id, null, function (err, response) {
-            console.log("deleteRoom err:" + err);
-        });
-    });
-
-    game.eventEmitter.on("listenToRoom", function (id) {
-        hipchat.deleteRequest('/room/' + id, null, function (err, response) {
-            console.log("deleteRoom err:" + err);
-        });
-    });
-
-    game.eventEmitter.on("createRoomAndInvite", function (name, topic, playerIds) {
-        hipchat.postRequest('/room', {"name": name, "privacy": "private", "topic": topic}, function (err, response) {
-
-            console.log("createRoom err:" + err);
-            game.wolfRoomId = response.id;
-            playerIds.forEach(function (id) {
-                hipchat.postRequest('/room/' + response.id + '/invite/' + id, {
-                    "name": name,
-                    "privacy": "private"
-                }, function (err, response) {
-                    console.log("invite err:" + err);
-                });
-            });
-
-        });
+    game.eventEmitter.on("listenToMessages", function (id) {
+        privateMessageIds.push({"id":id,"lastCheckTimestamp":Date.now()})
     });
 
     var cmdMapper = [
@@ -95,7 +70,19 @@ module.exports = function (game) {
                 console.log(history)
             }
         });
-    }
+
+        privateMessageIds.forEach(function (item) {
+            hipchat.getRequest('/user/' + item.id + '/history/latest', function (err, history) {
+                history.items.forEach(function (message) {
+
+                    if (new Date(message.date).getTime() > item.lastCheckTimestamp && message.from.id !== config.adminId) {
+                        item.lastCheckTimestamp = new Date(message.date).getTime();
+                        game.handleMessage(item.id,message.message);
+                    }
+                });
+            });
+        });
+    };
 
     setInterval(mainLoop, 5000);
 };

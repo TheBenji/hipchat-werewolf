@@ -20,7 +20,7 @@ module.exports = function (game) {
     });
 
     game.eventEmitter.on("listenToMessages", function (id) {
-        privateMessageIds.push({"id":id,"lastCheckTimestamp":Date.now()})
+        privateMessageIds.push({"id": id, "lastCheckTimestamp": Date.now()})
     });
 
     var cmdMapper = [
@@ -43,43 +43,48 @@ module.exports = function (game) {
     var mainLoop = function () {
         // this will list all of your rooms
         hipchat.getRequest('room/' + config.roomId + '/history/latest', function (err, history) {
-            if (history && history.items) {
+            if (!err) {
 
-                history.items.forEach(function (message) {
+                if (history && history.items) {
 
-                    if (new Date(message.date).getTime() > lastCheckTimestamp && message.from.id !== config.adminId) {
-                        lastCheckTimestamp = new Date(message.date).getTime();
-                        console.log('New message: ' + message.message);
-                        cmdMapper.forEach(function (cmd) {
-                            if (message.message.search(cmd.cmd) !== -1) {
-                                console.log('Found cmd: ' + cmd.cmd);
-                                var e = cmd.method(message);
+                    history.items.forEach(function (message) {
 
-                                hipchat.postRequest('room/' + config.roomId + '/message', {"message": e}, function (err, response) {
-                                    console.log("err:" + err);
-                                    console.log("response:" + response);
-                                });
+                        if (new Date(message.date).getTime() > lastCheckTimestamp && message.from.id !== config.adminId) {
+                            lastCheckTimestamp = new Date(message.date).getTime();
+                            console.log('New message: ' + message.message);
+                            cmdMapper.forEach(function (cmd) {
+                                if (message.message.search(cmd.cmd) !== -1) {
+                                    console.log('Found cmd: ' + cmd.cmd);
+                                    var e = cmd.method(message);
 
-                            }
-                        });
-                    }
-                });
+                                    hipchat.postRequest('room/' + config.roomId + '/message', {"message": e}, function (err, response) {
+                                        console.log("err:" + err);
+                                        console.log("response:" + response);
+                                    });
 
-            } else {
+                                }
+                            });
+                        }
+                    });
 
-                console.log(history)
+                } else {
+
+                    console.log(history)
+                }
             }
         });
 
         privateMessageIds.forEach(function (item) {
             hipchat.getRequest('/user/' + item.id + '/history/latest', function (err, history) {
-                history.items.forEach(function (message) {
+                if (!err) {
+                    history.items.forEach(function (message) {
 
-                    if (new Date(message.date).getTime() > item.lastCheckTimestamp && message.from.id !== config.adminId) {
-                        item.lastCheckTimestamp = new Date(message.date).getTime();
-                        game.handleMessage(item.id,message.message);
-                    }
-                });
+                        if (new Date(message.date).getTime() > item.lastCheckTimestamp && message.from.id !== config.adminId) {
+                            item.lastCheckTimestamp = new Date(message.date).getTime();
+                            game.handleMessage(item.id, message.message);
+                        }
+                    });
+                }
             });
         });
     };

@@ -4,7 +4,8 @@
   "roomId": -1,
   "durations": {
     "one": 20000,
-    "two": 20000
+    "two": 20000,
+    "three":20000
   },
   "minPlayers": 2,
   "roles": [

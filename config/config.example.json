@@ -7,7 +7,7 @@
     "day": 20000,
     "night":20000
   },
-  "minPlayers": 2,
+  "minPlayers": 3,
   "roles": [
     "",
     "villiger",
@@ -16,6 +16,6 @@
     "doctor"
   ],
   "rolesCount": {
-    "wolf": 2
+    "wolf": 1
   }
 }

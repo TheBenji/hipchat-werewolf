@@ -3,9 +3,9 @@
   "adminId": -1,
   "roomId": -1,
   "durations": {
-    "one": 20000,
-    "two": 20000,
-    "three":20000
+    "setup": 20000,
+    "day": 20000,
+    "night":20000
   },
   "minPlayers": 2,
   "roles": [

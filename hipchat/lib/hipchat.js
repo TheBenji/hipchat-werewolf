@@ -10,7 +10,7 @@ Hipchat.prototype.getRequest = function (endpoint, callback) {
     var self = this;
 
     request(self.api_root + endpoint + '?auth_token=' + self.token, function (err, res, body) {
-        if (!err && res.statusCode === 200) {
+        if (!err && res.statusCode == 200) {
             return callback(null, JSON.parse(body));
         }
 
@@ -25,7 +25,7 @@ Hipchat.prototype.postRequest = function (endpoint, postObject, callback) {
         method: "POST",
         json: postObject
     }, function (err, res, body) {
-        if (!err && res.statusCode === 200) {
+        if (!err && res.statusCode == 200) {
             return callback(null, body);
         }
 
@@ -41,7 +41,7 @@ Hipchat.prototype.deleteRequest = function (endpoint, postObject, callback) {
         method: "DELETE",
         json: postObject
     }, function (err, res, body) {
-        if (!err && res.statusCode === 200) {
+        if (!err && res.statusCode == 200) {
             return callback(null, body);
         }
 

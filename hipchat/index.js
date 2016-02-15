@@ -26,7 +26,7 @@ module.exports = function (game) {
     var cmdMapper = [
         {
             "cmd": "/start",
-            "method": function () {
+            "method": function (message) {
                 return game.startGame();
             }
         },
@@ -34,6 +34,14 @@ module.exports = function (game) {
             "cmd": "/join",
             "method": function (message) {
                 return game.joinPlayer("@" + message.from.mention_name, message.from.id);
+            }
+        },
+        {
+            "cmd": "/vote",
+            "method": function (message) {
+                if(message.message){
+                    return game.vote(message.from.id, message.message.replace("/vote", "").trim());
+                }
             }
         }
     ];
@@ -89,5 +97,5 @@ module.exports = function (game) {
         });
     };
 
-    setInterval(mainLoop, 5000);
+    setInterval(mainLoop, 8000);
 };

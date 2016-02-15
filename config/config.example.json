@@ -10,7 +10,7 @@
   "minPlayers": 3,
   "roles": [
     "",
-    "villiger",
+    "villager",
     "wolf",
     "seer",
     "doctor"

@@ -26,7 +26,7 @@ Hipchat.prototype.postRequest = function (endpoint, postObject, callback) {
         json: postObject
     }, function (err, res, body) {
         if (!err && res.statusCode == 200) {
-            return callback(null, body);
+            return callback(err, body);
         }
 
         return callback(err, body);

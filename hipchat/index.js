@@ -37,10 +37,10 @@ module.exports = function (game) {
             }
         },
         {
-            "cmd": "/vote",
+            "cmd": "/kill",
             "method": function (message) {
                 if(message.message){
-                    return game.vote(message.from.id, message.message.replace("/vote", "").trim());
+                    return game.vote(message.from.id, message.message.replace("/kill", "").trim());
                 }
             }
         }
@@ -53,7 +53,7 @@ module.exports = function (game) {
         hipchat.getRequest('room/' + config.roomId + '/history/latest', function (err, history) {
             if (!err) {
 
-                if (history && history.items) {
+                if (history && history.items && history.items instanceof Array) {
 
                     history.items.forEach(function (message) {
 

@@ -9,28 +9,40 @@ var Hipchat = function (token, api_root) {
 Hipchat.prototype.getRequest = function (endpoint, callback) {
     var self = this;
 
-    request(self.api_root + endpoint + '?auth_token=' + self.token, function (err, res, body) {
-        if (!err && res.statusCode == 200) {
-            return callback(null, JSON.parse(body));
-        }
+    try {
+        request(self.api_root + endpoint + '?auth_token=' + self.token, function (err, res, body) {
+            if (!err && res.statusCode == 200) {
+                return callback(null, JSON.parse(body));
+            }
 
-        return callback(err, JSON.parse(body));
-    });
+            return callback(err, JSON.parse(body));
+        });
+    } catch (e) {
+        //Ignore errors for now..
+        console.log('Error in request: ');
+        console.log(e); 
+    }
 };
 
 Hipchat.prototype.postRequest = function (endpoint, postObject, callback) {
     var self = this;
-    request({
-        url: self.api_root + endpoint + '?auth_token=' + self.token,
-        method: "POST",
-        json: postObject
-    }, function (err, res, body) {
-        if (!err && res.statusCode == 200) {
-            return callback(err, body);
-        }
+    try {
+        request({
+            url: self.api_root + endpoint + '?auth_token=' + self.token,
+            method: "POST",
+            json: postObject
+        }, function (err, res, body) {
+            if (!err && res.statusCode == 200) {
+                return callback(err, body);
+            }
 
-        return callback(err, body);
-    });
+            return callback(err, body);
+        });
+    } catch (e) {
+        //Ignore errors for now..
+        console.log('Error in request: ');
+        console.log(e);
+    }
 };
 
 

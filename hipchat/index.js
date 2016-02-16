@@ -43,6 +43,18 @@ module.exports = function (game) {
                     return game.vote(message.from.id, message.message.replace("/kill", "").trim());
                 }
             }
+        },
+        {
+            "cmd": "/alive",
+            "method": function(message){
+                return game.whoIsAlive();
+            }
+        },
+        {
+            "cmd": "/help",
+            "method": function(message){
+                return game.help();
+            }
         }
     ];
 
@@ -52,7 +64,6 @@ module.exports = function (game) {
         // this will list all of your rooms
         hipchat.getRequest('room/' + config.roomId + '/history/latest', function (err, history) {
             if (!err) {
-
                 if (history && history.items && history.items instanceof Array) {
 
                     history.items.forEach(function (message) {
@@ -85,13 +96,15 @@ module.exports = function (game) {
         privateMessageIds.forEach(function (item) {
             hipchat.getRequest('/user/' + item.id + '/history/latest', function (err, history) {
                 if (!err) {
-                    history.items.forEach(function (message) {
+                    if (history && history.items && history.items instanceof Array) {
+                        history.items.forEach(function (message) {
 
-                        if (new Date(message.date).getTime() > item.lastCheckTimestamp && message.from.id !== config.adminId) {
-                            item.lastCheckTimestamp = new Date(message.date).getTime();
-                            game.handleMessage(item.id, message.message);
-                        }
-                    });
+                            if (new Date(message.date).getTime() > item.lastCheckTimestamp && message.from.id !== config.adminId) {
+                                item.lastCheckTimestamp = new Date(message.date).getTime();
+                                game.handleMessage(item.id, message.message);
+                            }
+                        });
+                    }
                 }
             });
         });

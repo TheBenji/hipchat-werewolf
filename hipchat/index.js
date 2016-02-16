@@ -8,13 +8,22 @@ var privateMessageIds = [];
 module.exports = function (game) {
 
     game.eventEmitter.on("roomNotification", function (message, roomId) {
-        hipchat.postRequest('room/' + roomId + '/message', {"message": message}, function (err, response) {
+        hipchat.postRequest('room/' + roomId + '/notification', {
+            "message": message,
+            "notify": true,
+            "from": config.notifyName,
+            "color": 'purple',
+            "message_format": 'text'
+        }, function (err, response) {
             console.log("roomNotification  err:" + err);
         });
     });
 
     game.eventEmitter.on("privateMessage", function (message, id) {
-        hipchat.postRequest('user/' + id + '/message', {"message": message, "notify": true}, function (err, response) {
+        hipchat.postRequest('user/' + id + '/message', {
+            "message": message,
+            "notify": true
+        }, function (err, response) {
             console.log("privateMessage err:" + err);
         });
     });
@@ -33,27 +42,33 @@ module.exports = function (game) {
         {
             "cmd": "/join",
             "method": function (message) {
-                return game.joinPlayer("@" + message.from.mention_name, message.from.id);
+                return game.addPlayer("@" + message.from.mention_name, message.from.id);
             }
         },
         {
             "cmd": "/kill",
             "method": function (message) {
-                if(message.message){
+                if (message.message) {
                     return game.vote(message.from.id, message.message.replace("/kill", "").trim());
                 }
             }
         },
         {
             "cmd": "/alive",
-            "method": function(message){
+            "method": function (message) {
                 return game.whoIsAlive();
             }
         },
         {
             "cmd": "/help",
-            "method": function(message){
+            "method": function (message) {
                 return game.help();
+            }
+        },
+        {
+            "cmd": "/time",
+            "method": function (message) {
+                return game.time();
             }
         }
     ];
@@ -68,19 +83,13 @@ module.exports = function (game) {
 
                     history.items.forEach(function (message) {
 
-                        if (new Date(message.date).getTime() > lastCheckTimestamp && message.from.id !== config.adminId) {
+                        if (new Date(message.date).getTime() > lastCheckTimestamp && message.from.id !== config.adminId && message.from.mention_name) {
                             lastCheckTimestamp = new Date(message.date).getTime();
                             console.log('New message: ' + message.message);
                             cmdMapper.forEach(function (cmd) {
                                 if (message.message.search(cmd.cmd) !== -1) {
                                     console.log('Found cmd: ' + cmd.cmd);
-                                    var e = cmd.method(message);
-
-                                    hipchat.postRequest('room/' + config.roomId + '/message', {"message": e}, function (err, response) {
-                                        console.log("err:" + err);
-                                        console.log("response:" + response);
-                                    });
-
+                                    cmd.method(message);
                                 }
                             });
                         }

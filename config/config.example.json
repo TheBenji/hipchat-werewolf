@@ -4,8 +4,8 @@
   "roomId": -1,
   "durations": {
     "setup": 20000,
-    "day": 20000,
-    "night":20000
+    "day": 60000,
+    "night":60000
   },
   "minPlayers": 3,
   "roles": [

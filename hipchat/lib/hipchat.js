@@ -16,7 +16,7 @@ Hipchat.prototype.getRequest = function (endpoint, callback) {
 
         return callback(err, JSON.parse(body));
     });
-}
+};
 
 Hipchat.prototype.postRequest = function (endpoint, postObject, callback) {
     var self = this;
@@ -31,7 +31,7 @@ Hipchat.prototype.postRequest = function (endpoint, postObject, callback) {
 
         return callback(err, body);
     });
-}
+};
 
 
 Hipchat.prototype.deleteRequest = function (endpoint, postObject, callback) {
@@ -47,7 +47,7 @@ Hipchat.prototype.deleteRequest = function (endpoint, postObject, callback) {
 
         return callback(err, body);
     });
-}
+};
 
 
 module.exports = Hipchat;
